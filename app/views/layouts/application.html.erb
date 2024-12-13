@@ -1,23 +1,45 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= content_for(:title) || "Multiplication Table App" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<head>
+  <title>Multiplication Tables</title>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>Multiplication Table Generator</h1>
+    
+    <%= form_with url: tables_generate_path, method: :post, local: true do |form| %>
+      <div class="form-group">
+        <%= form.label :size, "Enter a number (1-12):" %>
+        <%= form.number_field :size, in: 1..12, required: true, class: "form-control" %>
+      </div>
+      <%= form.submit "Generate", class: "btn btn-primary" %>
+    <% end %>
 
-    <%= yield :head %>
+    <% if flash[:alert] %>
+      <div class="alert alert-danger"><%= flash[:alert] %></div>
+    <% end %>
 
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-  </head>
-
-  <body>
-    <%= yield %>
-  </body>
+    <% if @multiplication_table && @size.present? %>
+      <h2 class="mt-5">Multiplication Table for <%= @size %></h2>
+      <table class="table table-bordered mt-3">
+        <thead>
+          <tr>
+            <th>Multiplicand</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% (1..12).each do |i| %>
+            <tr>
+              <td><%= @size %> x <%= i %></td>
+              <td><%= @size * i %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</body>
 </html>

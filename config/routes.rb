@@ -1,18 +1,17 @@
 Rails.application.routes.draw do
-  get "tables/index"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  # Set the root route
+  root 'tables#index'
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+  # Route for form submission
+  post 'tables/generate', to: 'tables#generate'
 
-  # Render dynamic PWA files from app/views/pwa/*
-  get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+  # Define other routes
+  get 'tables/index'
 
- # config/routes.rb
- Rails.application.routes.draw do
-  root 'tables#index'  # Set the root route
-  post 'tables/generate', to: 'tables#generate'  # Route for form submission
-end
+  # Health check route
+  get 'up' => 'rails/health#show', as: :rails_health_check
+
+  # PWA routes
+  get 'service-worker' => 'rails/pwa#service_worker', as: :pwa_service_worker
+  get 'manifest' => 'rails/pwa#manifest', as: :pwa_manifest
 end
